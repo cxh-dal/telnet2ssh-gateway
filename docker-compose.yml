@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  tts-proxy:
+    build: .
+    container_name: tts-proxy
+    restart: always
+    environment:
+      - SSH_USERNAME=ritts
+      - SSH_PASSWORD=ritts
+      - HEALTH_ADDR=:8080
+      - CONFIG_PATH=/data/config.json
+      - HOST_KEY_PATH=/data/ssh_host_rsa_key
+    volumes:
+      - ./data:/data
+    ports:
+      - "4001-4032:4001-4032/tcp"
+      - "8080:8080/tcp"

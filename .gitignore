@@ -1,0 +1,14 @@
+# Build artifacts
+/bin/
+/dist/
+/coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# Runtime data
+/data/
+
+# Go
+*.test
