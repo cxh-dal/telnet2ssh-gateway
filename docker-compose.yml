@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  telnet-ssh-proxy:
+    build: .
+    image: telnet-ssh-proxy:latest
+    container_name: telnet-ssh-proxy
+    restart: unless-stopped
+    
+    # 端口映射 (4001-4032)
+    ports:
+      - "4001-4032:4001-4032"
+    
+    # 挂载配置文件和数据目录
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./data:/app/data
+      - ./logs:/app/logs
+    
+    # 环境变量
+    environment:
+      - CONFIG_FILE=/app/config.yaml
+      - TZ=Asia/Shanghai
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "python", "health_check.py"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    
+    # 资源限制（可选）
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 1G
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 256M
