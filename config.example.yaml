@@ -1,0 +1,192 @@
+# Telnet to SSH Proxy 配置示例
+# 复制此文件为 config.yaml 并根据需要修改
+
+# SSH服务器配置
+ssh:
+  host: "0.0.0.0"
+  username: "ritts"
+  password: "ritts"
+  host_key: "/app/data/ssh_host_key"
+
+# 端口映射配置示例
+mappings:
+  # 交换机1
+  4001:
+    host: "192.168.1.100"
+    port: 23
+    enabled: true
+    description: "核心交换机"
+  
+  # 路由器1
+  4002:
+    host: "192.168.1.101"
+    port: 23
+    enabled: true
+    description: "边界路由器"
+  
+  # 服务器串口
+  4003:
+    host: "192.168.1.102"
+    port: 2023
+    enabled: true
+    description: "服务器串口控制台"
+  
+  # 剩余端口（未配置）
+  4004:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射4"
+  4005:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射5"
+  4006:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射6"
+  4007:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射7"
+  4008:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射8"
+  4009:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射9"
+  4010:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射10"
+  4011:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射11"
+  4012:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射12"
+  4013:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射13"
+  4014:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射14"
+  4015:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射15"
+  4016:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射16"
+  4017:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射17"
+  4018:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射18"
+  4019:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射19"
+  4020:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射20"
+  4021:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射21"
+  4022:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射22"
+  4023:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射23"
+  4024:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射24"
+  4025:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射25"
+  4026:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射26"
+  4027:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射27"
+  4028:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射28"
+  4029:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射29"
+  4030:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射30"
+  4031:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射31"
+  4032:
+    host: ""
+    port: 23
+    enabled: false
+    description: "映射32"
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "/app/logs/proxy.log"
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+
+# 健康检查配置
+health_check:
+  enabled: true
+  interval: 30  # 秒
+  timeout: 5    # 秒
