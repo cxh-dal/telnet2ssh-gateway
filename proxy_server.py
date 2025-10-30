@@ -271,12 +271,29 @@ class SSHProxyServer:
             session.start()
             
         except Exception as e:
-            # 对健康检查或非SSH探测导致的 banner 错误降级为调试日志
-            msg = str(e)
-            if 'Error reading SSH protocol banner' in msg:
-                logger.debug("收到非SSH/健康检查短连接，已忽略")
+            # 对健康检查或端口扫描等短连接引发的握手异常降级为调试日志
+            msg = str(e) if str(e) else repr(e)
+            try:
+                import socket as _socket
+                import paramiko as _paramiko
+                short_conn = isinstance(
+                    e,
+                    (
+                        EOFError,
+                        _socket.timeout,
+                        _socket.error,
+                        OSError,
+                        _paramiko.SSHException,
+                    ),
+                )
+            except Exception:
+                short_conn = False
+
+            if 'Error reading SSH protocol banner' in msg or short_conn:
+                logger.debug(f"短连接或握手中断({e.__class__.__name__}): {msg}")
             else:
-                logger.error(f"处理客户端连接时出错: {e}")
+                # 未知异常保留堆栈，便于排查（避免空错误信息）
+                logger.exception("处理客户端连接时出错")
         finally:
             try:
                 if transport:
