@@ -271,7 +271,12 @@ class SSHProxyServer:
             session.start()
             
         except Exception as e:
-            logger.error(f"处理客户端连接时出错: {e}")
+            # 对健康检查或非SSH探测导致的 banner 错误降级为调试日志
+            msg = str(e)
+            if 'Error reading SSH protocol banner' in msg:
+                logger.debug("收到非SSH/健康检查短连接，已忽略")
+            else:
+                logger.error(f"处理客户端连接时出错: {e}")
         finally:
             try:
                 if transport:
@@ -309,7 +314,7 @@ class ProxyManager:
         except Exception as e:
             logger.error(f"加载配置文件失败: {e}")
             raise
-    
+        
     def setup_host_key(self):
         """设置SSH主机密钥"""
         host_key_file = self.config['ssh'].get('host_key', 'ssh_host_key')
@@ -416,6 +421,11 @@ def setup_logging(config: dict):
         format=log_format,
         handlers=handlers
     )
+
+    # 降低 Paramiko 在握手阶段的噪音日志，避免健康检查的短连接刷屏
+    logging.getLogger("paramiko").setLevel(logging.WARNING)
+    logging.getLogger("paramiko.transport").setLevel(logging.WARNING)
+
 
 
 def main():

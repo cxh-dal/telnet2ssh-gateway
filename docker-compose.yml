@@ -6,6 +6,8 @@ services:
     image: telnet-ssh-proxy:latest
     container_name: telnet-ssh-proxy
     restart: unless-stopped
+    # 显式使用 Docker 桥接网络，确保容器通过主机进行 NAT 转发
+    network_mode: "bridge"
     
     # 端口映射 (4001-4032)
     ports:
