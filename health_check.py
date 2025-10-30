@@ -11,14 +11,38 @@ import time
 
 
 def check_port(port: int, timeout: int = 5) -> bool:
-    """检查端口是否可连接"""
+    """检查端口是否可连接，并发送最小SSH banner避免服务端错误日志"""
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(timeout)
         result = sock.connect_ex(('127.0.0.1', port))
-        sock.close()
-        return result == 0
-    except Exception as e:
+        if result != 0:
+            try:
+                sock.close()
+            except:
+                pass
+            return False
+
+        # 连接成功后，发送一个最小的 SSH 客户端标识，
+        # 避免服务端 Paramiko 因读取不到 banner 而报错。
+        try:
+            sock.settimeout(0.5)
+            sock.sendall(b"SSH-2.0-HealthCheck\r\n")
+            # 读取少量数据（若有），以完成一次轻量交互
+            try:
+                _ = sock.recv(256)
+            except Exception:
+                pass
+        except Exception:
+            # 发送/接收失败不影响健康结论
+            pass
+        finally:
+            try:
+                sock.close()
+            except:
+                pass
+        return True
+    except Exception:
         return False
 
 

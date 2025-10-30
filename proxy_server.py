@@ -422,9 +422,10 @@ def setup_logging(config: dict):
         handlers=handlers
     )
 
-    # 降低 Paramiko 在握手阶段的噪音日志，避免健康检查的短连接刷屏
-    logging.getLogger("paramiko").setLevel(logging.WARNING)
-    logging.getLogger("paramiko.transport").setLevel(logging.WARNING)
+    # 降低 Paramiko 在握手阶段的噪音日志，避免健康检查短连接刷屏
+    # 使用 CRITICAL 屏蔽其内部 Transport 线程的 ERROR 堆栈
+    logging.getLogger("paramiko").setLevel(logging.CRITICAL)
+    logging.getLogger("paramiko.transport").setLevel(logging.CRITICAL)
 
 
 
